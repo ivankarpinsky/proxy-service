@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import io.swagger.annotations.ApiOperation;
 
 import javax.annotation.Resource;
 import java.util.Arrays;
@@ -27,6 +28,7 @@ public class ProxyController {
     @Resource
     private ProxyRestService restService;
 
+    @ApiOperation(value = "Получение прокси для парсера", httpMethod = "GET", response = "List<ParserProxy>", notes = "Возвращает прокси для определённого парсера, ранжированные по увеличению времени ответа")
     @GetMapping("/proxies")
     public List<ParserProxy> getProxies(@RequestParam String serviceName) {
         try {
@@ -36,11 +38,13 @@ public class ProxyController {
         }
     }
 
+    @ApiOperation(value = "Получение списка всех парсеров", httpMethod = "GET", response = "List<String>", notes = "Возвращает список всех парсеров")
     @GetMapping("/parsers")
     public List<String> getParsers() {
         return Arrays.stream(Parser.values()).map(Enum::name).collect(Collectors.toList());
     }
 
+    @ApiOperation(value = "Очистка базы данных", httpMethod = "GET", notes = "Очищает базу данных")
     @GetMapping("/clean")
     public void cleanDatabase() {
         restService.cleanDatabase();
